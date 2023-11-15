@@ -36,11 +36,6 @@ Use command-line arguments to generate specific types of graphs:
 
 -l, --latest: Generate graphs with the latest data.
 
-## Contributing
-
-Contributions are welcome! Feel free to fork the repository, make your changes, and submit a pull request. 🤝
-
-
 
 ## 📝 Additional Notes
 
