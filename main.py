@@ -23,13 +23,13 @@ if __name__ == '__main__':
 
     # Define a configuration dictionary based on the provided arguments
     configuration = {
-        'plugins': args.plugins and not args.save and not args.history and not args.latest,
-        'themes': args.themes and not args.save and not args.history and not args.latest,
-        'releases': args.releases and not args.save and not args.history and not args.latest,
+        'plugins': args.plugins,
+        'themes': args.themes,
+        'releases': args.releases,
         'save': args.save,
         'history': args.history,
         'latest': args.latest,
-        'all' : args.plugins and args.themes
+        'all' : args.plugins
     }
 
     # Execute functions based on the selected graph types
@@ -39,3 +39,5 @@ if __name__ == '__main__':
         plugins.graph_plugins(configuration)
     if args.releases or args.all:
         releases.graph_releases(configuration)
+
+        

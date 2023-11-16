@@ -30,37 +30,34 @@ def graph_themes(configuration):
 
     # Fetch monthly theme counts data from GitHub commit history
     monthly_themes_counts = get_theme_data_from_github(commit_history_url, headers)
-
+    
     # Fetch latest theme statistics data
     data = get_theme_stats_from_url("https://releases.obsidian.md/stats/theme")
-    
-    if configuration["save"] and configuration["themes"]:
-        # Save monthly theme counts data and the latest data
-        save_monthly_theme_counts_to_file(monthly_themes_counts)
-        save_latest_data(data, save_path)
 
-    if configuration["history"] and configuration["themes"]:
-        # Generate historical theme graphs
-        monthly_themes_counts = get_theme_data_from_github(commit_history_url, headers)
-        draw_monthly_theme_counts_graph(monthly_themes_counts)
-        draw_theme_growth_graph(monthly_themes_counts)
-
-    if configuration["latest"] and configuration["themes"]:
-        # Generate graphs with the latest theme data
-        draw_download_distribution_graph(data)
-        draw_theme_boxplot(data)
-
-    if configuration["themes"]or ["all"]:
-        # Save data, generate graphs, and save latest data for themes
-        save_monthly_theme_counts_to_file(monthly_themes_counts)
-        save_latest_data(data, save_path)
-        monthly_themes_counts = get_theme_data_from_github(commit_history_url, headers)
-        draw_monthly_theme_counts_graph(monthly_themes_counts)
-        draw_theme_growth_graph(monthly_themes_counts)
-        draw_download_distribution_graph(data)
-        draw_theme_boxplot(data)
-
-    
+    if configuration["themes"] or ["all"]:
+        if configuration["save"]:
+            # -t -s
+            save_monthly_theme_counts_to_file(monthly_themes_counts)
+            save_latest_data(data, save_path)
+        if configuration["latest"]:
+            # -t -l
+            draw_download_distribution_graph(data)
+            draw_theme_boxplot(data)
+            draw_theme_histogram(data)
+        if configuration["history"]:
+            # -t -hi
+            draw_monthly_theme_counts_graph(monthly_themes_counts)
+            draw_theme_growth_graph(monthly_themes_counts)
+        if not any([configuration["save"], configuration["latest"], configuration["history"]]):
+            # -t or -all
+            save_monthly_theme_counts_to_file(monthly_themes_counts)
+            save_latest_data(data, save_path)
+            draw_monthly_theme_counts_graph(monthly_themes_counts)
+            draw_theme_growth_graph(monthly_themes_counts)
+            draw_download_distribution_graph(data)
+            draw_theme_boxplot(data)
+            draw_theme_histogram(data)
+        
 def get_theme_data_from_github(commit_history_url, headers):
     """
     Fetch monthly theme counts data from GitHub's commit history and store it locally.
@@ -340,3 +337,20 @@ def draw_theme_boxplot(data):
     plt.xlabel("Themes")
     plt.ylabel("Downloads")
     plt.show()
+
+def draw_theme_histogram(data):
+    """
+    Create a histogram of download numbers from the provided data for themes.
+    """
+    # Convert JSON data to a DataFrame
+    df = pd.DataFrame.from_dict(data, orient='index')
+    
+    # Create the histogram
+    plt.figure(figsize=(7, 10))
+    sns.histplot(data=df['download'], color='#773ee9')  # Set the color here
+
+    plt.title("Histogram of Theme Downloads")
+    plt.xlabel("Downloads")
+    plt.ylabel("Frequency")
+    plt.show()
+

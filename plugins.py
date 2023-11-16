@@ -30,36 +30,34 @@ def graph_plugins(configuration):
     
     url = "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-plugins.json"
 
-    # Check if saving data is enabled and if the "plugins" key is present in the configuration.
-    if configuration["save"] and ["plugins"]:
-        save_data(data, save_path)
-        save_monthly_downloads_to_file(monthly_downloads)
-        save_monthly_plugin_counts_to_file(monthly_plugin_counts)
-    
-    # Check if generating history graphs is enabled and if the "plugins" key is present in the configuration.
-    if configuration["history"] and ["plugins"]:
-        draw_download_history_graph(monthly_downloads)
-        draw_monthly_plugin_counts_graph(monthly_plugin_counts)
-        draw_plugin_growth_graph(monthly_plugin_counts)
-        draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads)
 
-    # Check if generating latest graphs is enabled and if the "plugins" key is present in the configuration.
-    if configuration["latest"] and ["plugins"]:
-        draw_download_distribution_graph(data)
-        draw_plugin_boxplot(data)
-
-    # Check if generating any type of graph related to plugins is enabled.
-    if configuration["plugins"] or ["all"]:
-        save_data(data, save_path)
-        save_monthly_downloads_to_file(monthly_downloads)
-        save_monthly_plugin_counts_to_file(monthly_plugin_counts)
-        draw_download_history_graph(monthly_downloads)
-        draw_monthly_plugin_counts_graph(monthly_plugin_counts)
-        draw_plugin_growth_graph(monthly_plugin_counts)
-        draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads)
-        draw_download_distribution_graph(data)
-        draw_plugin_boxplot(data)
-
+    if configuration["themes"] or ["all"]:
+        if configuration["save"]:
+            # -p -s
+            save_data(data, save_path)
+            save_monthly_downloads_to_file(monthly_downloads)
+            save_monthly_plugin_counts_to_file(monthly_plugin_counts)
+        if configuration["latest"]:
+            # -p -l
+            draw_download_distribution_graph(data)
+            draw_plugin_boxplot(data)
+        if configuration["history"]:
+            # -p -hi
+            draw_download_history_graph(monthly_downloads)
+            draw_monthly_plugin_counts_graph(monthly_plugin_counts)
+            draw_plugin_growth_graph(monthly_plugin_counts)
+            draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads)
+        if  not any([configuration["save"], configuration["latest"], configuration["history"]]):
+            # -p or -all
+            save_data(data, save_path)
+            save_monthly_downloads_to_file(monthly_downloads)
+            save_monthly_plugin_counts_to_file(monthly_plugin_counts)
+            draw_download_history_graph(monthly_downloads)
+            draw_monthly_plugin_counts_graph(monthly_plugin_counts)
+            draw_plugin_growth_graph(monthly_plugin_counts)
+            draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads)
+            draw_download_distribution_graph(data)
+            draw_plugin_boxplot(data)
     
 
 # Function to retrieve plugin data from GitHub and process it.
