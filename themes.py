@@ -42,8 +42,9 @@ def graph_themes(configuration):
         if configuration["latest"]:
             # -t -l
             draw_download_distribution_graph(data)
-            draw_theme_boxplot(data)
+            #draw_theme_boxplot(data)
             draw_theme_histogram(data)
+            draw_theme_kde(data)
         if configuration["history"]:
             # -t -hi
             draw_monthly_theme_counts_graph(monthly_themes_counts)
@@ -305,22 +306,21 @@ def draw_download_distribution_graph(data):
     # Extract download counts from the data
     downloads = [theme['download'] for theme in data.values()]
 
-    # Filter for outliers, if necessary
-    filtered_downloads = [download for download in downloads if download <= 500_000]
-
     # Define the bins for the histogram
-    bins = 100  # Fixed number of bins
+    bins = 50 # Fixed number of bins
 
     # Create the histogram
     plt.figure(figsize=(12, 6))
-    plt.hist(filtered_downloads, bins=bins, edgecolor='black', color='#773ee9', alpha=0.7)
+    plt.hist(downloads, bins=bins, edgecolor='black', color='#773ee9', alpha=0.7)
 
     # Set axis labels and title
     plt.xlabel('Number of Downloads')
     plt.ylabel('Number of Themes')
     plt.title('Distribution of Theme Downloads')
+    plt.yscale('log')  # Set y-axis to log scale
     plt.tight_layout()
     plt.show()
+
 
 def draw_theme_boxplot(data):
     """
@@ -354,3 +354,18 @@ def draw_theme_histogram(data):
     plt.ylabel("Frequency")
     plt.show()
 
+def draw_theme_kde(data):
+    """
+    Create a KDE plot of download numbers from the provided data for themes.
+    """
+    # Convert JSON data to a DataFrame
+    df = pd.DataFrame.from_dict(data, orient='index')
+    
+    # Create the KDE plot
+    plt.figure(figsize=(10, 7))
+    sns.kdeplot(df['download'], color='#773ee9')
+
+    plt.title("KDE Plot of Theme Downloads")
+    plt.xlabel("Downloads")
+    plt.ylabel("Density")
+    plt.show()
