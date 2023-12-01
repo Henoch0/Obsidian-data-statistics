@@ -10,11 +10,13 @@ save_path = "saved_releases"
 def graph_releases(configuration):
     data = get_release_stats_from_url("https://api.github.com/repos/obsidianmd/obsidian-releases/releases")
     
-    if configuration.get('releases'):
-        save_data(data, save_path)
-        draw_stacked_bar_chart(data)
 
+    if configuration["releases"] or ["all"]:
+        if configuration["save"]:
+            save_data(data, save_path)
 
+        if configuration["history"]:
+            draw_stacked_bar_chart(data)
 def save_data(data, save_path):
     """
     Saves the DataFrame as a CSV file with the current date in the filename.
@@ -86,3 +88,5 @@ def draw_stacked_bar_chart(df):
     plt.title('Stacked Bar Chart of Downloads by Version and OS')
     plt.legend(title='OS', labels=['Linux', 'Windows', 'MacOS'])
     plt.show()
+
+
