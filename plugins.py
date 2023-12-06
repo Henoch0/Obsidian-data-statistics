@@ -1,12 +1,10 @@
 import pandas as pd
-import re
 import os
 import csv
 import datetime
 from datetime import datetime
 import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import requests
 import json
 import numpy as np
