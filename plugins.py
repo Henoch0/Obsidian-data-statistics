@@ -38,8 +38,9 @@ def graph_plugins(configuration):
         if configuration["latest"]:
             # -p -l
             draw_download_distribution_graph(data)
-            #draw_plugin_boxplot(data)
             draw_plugin_kde(data)
+
+
         if configuration["history"]:
             # -p -hi
             draw_download_history_graph(monthly_downloads)
@@ -56,7 +57,7 @@ def graph_plugins(configuration):
             draw_plugin_growth_graph(monthly_plugin_counts)
             draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads)
             draw_download_distribution_graph(data)
-            draw_plugin_boxplot(data)
+            draw_plugin_kde(data)
     
 
 # Function to retrieve plugin data from GitHub and process it.
@@ -418,32 +419,10 @@ def draw_combined_stats_graph(monthly_plugin_counts, monthly_downloads):
     plt.grid(True, linestyle='--', linewidth=0.5)
     plt.show()
 
-def draw_plugin_boxplot(data):
-    """
-    Create a boxplot of download numbers from the provided data.
-    """
-    # Convert JSON data to a DataFrame
-    df = pd.DataFrame.from_dict(data, orient='index')
-    
-    # Calculate the median
-    median = df['downloads'].median()
-    
-    # Calculate the average of all downloads
-    average_downloads = df['downloads'].mean()
-    
-    # Create the boxplot
-    plt.figure(figsize=(7, 10))
-    sns.boxplot(data=df['downloads'], color='#773ee9')  # Set the color here
-
-    # Add labels for the median, plugins below Q1, and average above the title
-    plt.title(f"Boxplot (Median: {median:.0f}, Average: {average_downloads:.2f})", y=1.03)  # Raise the title on the Y-axis
-
-    plt.xlabel("Plugins")
-    plt.ylabel("Downloads in Millions")
-    plt.show()
 
 
 def draw_plugin_kde(data):
+
     """
     Create a KDE plot of download numbers from the provided data.
     """
@@ -466,3 +445,5 @@ def draw_plugin_kde(data):
     plt.xlabel("Downloads")
     plt.ylabel("Density")
     plt.show()
+
+
