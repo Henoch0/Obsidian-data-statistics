@@ -2,7 +2,7 @@
 
 Welcome to the Obsidian Data Analysis project💜
 
-This tool is designed to generate insightful graphs and manage data related to Obsidian, a popular note-taking and knowledge management application.
+This tool is designed to generate graphs and manage data related to Obsidian, a popular note-taking and knowledge management application.
 
 ## Features
 
